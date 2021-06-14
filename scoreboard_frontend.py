@@ -2,8 +2,8 @@ import sys,os
 import curses,json,time
 import emoji
 
-team1 = "Smith"
-team2 = "Marshall"
+blueteam =  ["Smith","Van Hoy","Morrell","Odlevak"]
+yellowteam = ["Marshall","Roark","Dacquisto","Fort"]
 
 title = ["SHEET 1","SHEET 2","SHEET 3","SHEET 4"]
 
@@ -11,8 +11,8 @@ hammer = emoji.emojize(":hammer:")
 
 def draw_scoreboard(stdscr):
     k = 0
-    global team1
-    global team2
+    global blueteam
+    global yellowteam
 
     # Clear and refresh the screen for a blank canvas
     stdscr.clear()
@@ -36,21 +36,23 @@ def draw_scoreboard(stdscr):
 
         # Declaration of strings
         #title = "SHEET " + str(jsondata[2]["sheet"])[:width-1]
-        subtitle = team1 + " vs " + team2[:width-1]
         bluescoreline = ["","","",""]
         yellowscoreline = ["","","",""]
-        if len(team2)>len(team1):
-            diff = len(team2)-len(team1)
-            temp = team1 + " "*diff
-            team1 = temp
-        else:
-            diff = len(team1)-len(team2)
-            temp = team2 + " "*diff
-            team2 = temp        
+        i = 0
+        while i < 4:
+            if len(blueteam[i])>len(yellowteam[i]):
+                diff = len(blueteam[i])-len(yellowteam[i])
+                temp = yellowteam[i] + " "*diff
+                yellowteam[i] = temp
+            elif len(yellowteam[i])>len(blueteam[i]):
+                diff = len(yellowteam[i])-len(blueteam[i])
+                temp = blueteam[i] + " "*diff
+                blueteam[i] = temp
+            i += 1
         j = 0
         i = 0
         while j < 4:
-            bluescoreline[j] = team1 + " "
+            bluescoreline[j] = blueteam[j] + " "
             i = 0
             while i < len(jsondata[j]["Blue"]):
                 bluescoreline[j] += str(jsondata[j]["Blue"][i]) + "  "
@@ -58,7 +60,7 @@ def draw_scoreboard(stdscr):
             j += 1
         j = 0
         while j < 4:
-            yellowscoreline[j] = team2 + " "
+            yellowscoreline[j] = yellowteam[j] + " "
             i = 0
             while i < len(jsondata[j]["Yellow"]):
                 yellowscoreline[j] += str(jsondata[j]["Yellow"][i]) + "  "
@@ -76,7 +78,6 @@ def draw_scoreboard(stdscr):
 
         # Centering calculations
         start_x_title = int((width // 2) - (len(title) // 2) - len(title) % 2)
-        start_x_subtitle = int((width // 2) - (len(subtitle) // 2) - len(subtitle) % 2)
         start_x_pointsstr = int((width // 2) - (len(pointsline) // 2) - len(pointsline) % 2)
         start_x_bluestr = int((width // 2) - (len(bluescoreline[0]) // 2) - len(bluescoreline[0]) % 2)
         start_x_yellowstr = int((width // 2) - (len(yellowscoreline[0]) // 2) - len(yellowscoreline[0]) % 2)
@@ -103,17 +104,17 @@ def draw_scoreboard(stdscr):
         while i < 4:
             stdscr.attron(curses.color_pair(1))
             stdscr.attron(curses.A_BOLD)
-            stdscr.addstr(start_y, start_x_title, title[i])
-            stdscr.addstr((start_y + 1)*(i+1), (width // 2) - 2, '-' * 4)
+            stdscr.addstr(start_y + (i*5), start_x_title, title[i])
+            stdscr.addstr(start_y + 1+ (i*5), (width // 2) - 2, '-' * 8)
             stdscr.attron(curses.color_pair(2))
             stdscr.attron(curses.A_BOLD)
-            stdscr.addstr((start_y + 2)*(i+1), start_x_bluestr, bluescoreline[i])
+            stdscr.addstr(start_y + 2+ (i*5), start_x_bluestr, bluescoreline[i].replace("0"," "))
             stdscr.attroff(curses.color_pair(2))
             stdscr.attroff(curses.A_BOLD)
-            stdscr.addstr((start_y + 3)*(i+1), start_x_bluestr, pointsline[i])
+            stdscr.addstr(start_y + 3+ (i*5), start_x_bluestr, pointsline[i])
             stdscr.attron(curses.color_pair(3))
             stdscr.attron(curses.A_BOLD)
-            stdscr.addstr((start_y + 4)*(i+1), start_x_yellowstr, yellowscoreline[i])
+            stdscr.addstr(start_y + 4+ (i*5), start_x_yellowstr, yellowscoreline[i].replace("0"," "))
             i += 1
 
 
