@@ -46,28 +46,27 @@ def draw_scoreboard(stdscr):
         else:
             diff = len(team1)-len(team2)
             temp = team2 + " "*diff
-            team2 = temp
-        i = 0
+            team2 = temp        
         j = 0
+        i = 0
         while j < 4:
             bluescoreline[j] = team1 + " "
+            i = 0
             while i < len(jsondata[j]["Blue"]):
                 bluescoreline[j] += str(jsondata[j]["Blue"][i]) + "  "
                 i += 1
             j += 1
         j = 0
-        i = 0
         while j < 4:
             yellowscoreline[j] = team2 + " "
+            i = 0
             while i < len(jsondata[j]["Yellow"]):
                 yellowscoreline[j] += str(jsondata[j]["Yellow"][i]) + "  "
                 i += 1
             j += 1
 
-        blueline = bluescoreline
-        yellowline = yellowscoreline
         pointsline =  "H  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15"
-        diff = len(blueline)-len(pointsline)
+        diff = len(bluescoreline[0])-len(pointsline)
         pointsline = " "*(diff-2) + "H  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15"
         # Centering calculations
         start_x_title = int((width // 2) - (len(title) // 2) - len(title) % 2)
