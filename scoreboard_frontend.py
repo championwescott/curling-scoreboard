@@ -20,9 +20,9 @@ def draw_scoreboard(stdscr):
 
     # Start colors in curses
     curses.start_color()
-    curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_CYAN, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)
 
     # Loop where k is the last character pressed
     while True:
@@ -66,8 +66,14 @@ def draw_scoreboard(stdscr):
             j += 1
 
         pointsline =  "H  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15"
-        diff = len(bluescoreline[0])-len(pointsline)
-        pointsline = " "*(diff-2) + "H  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15"
+        pointslinelen = len(pointsline)
+        pointsline = ["","","",""]
+        i = 0
+        while i < 4:
+            diff = len(bluescoreline[i])-pointslinelen
+            pointsline[i] = " "*(diff-2) + "H  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15"
+            i += 1
+
         # Centering calculations
         start_x_title = int((width // 2) - (len(title) // 2) - len(title) % 2)
         start_x_subtitle = int((width // 2) - (len(subtitle) // 2) - len(subtitle) % 2)
@@ -78,8 +84,8 @@ def draw_scoreboard(stdscr):
         start_y = 3
 
         # Rendering some text
-        whstr = "Width: {}, Height: {}".format(width, height)
-        stdscr.addstr(0, 0, whstr, curses.color_pair(1))
+        #whstr = "Width: {}, Height: {}".format(width, height)
+        #stdscr.addstr(0, 0, whstr, curses.color_pair(1))
 
         # Render status bar
         stdscr.attron(curses.color_pair(3))
@@ -93,32 +99,23 @@ def draw_scoreboard(stdscr):
 
         # Rendering title
         
+        i = 0
+        while i < 4:
+            stdscr.attron(curses.color_pair(1))
+            stdscr.attron(curses.A_BOLD)
+            stdscr.addstr(start_y, start_x_title, title[i])
+            stdscr.addstr((start_y + 1)*(i+1), (width // 2) - 2, '-' * 4)
+            stdscr.attron(curses.color_pair(2))
+            stdscr.attron(curses.A_BOLD)
+            stdscr.addstr((start_y + 2)*(i+1), start_x_bluestr, bluescoreline[i])
+            stdscr.attroff(curses.color_pair(2))
+            stdscr.attroff(curses.A_BOLD)
+            stdscr.addstr((start_y + 3)*(i+1), start_x_bluestr, pointsline[i])
+            stdscr.attron(curses.color_pair(3))
+            stdscr.attron(curses.A_BOLD)
+            stdscr.addstr((start_y + 4)*(i+1), start_x_yellowstr, yellowscoreline[i])
+            i += 1
 
-        # Turning off attributes for title
-        stdscr.attroff(curses.color_pair(2))
-        stdscr.attroff(curses.A_BOLD)
-
-        # Print rest of text
-        stdscr.addstr(start_y, start_x_title, title[0])
-        stdscr.addstr(start_y + 1, (width // 2) - 2, '-' * 4)
-        stdscr.addstr(start_y + 2, start_x_bluestr, bluescoreline[0])
-        stdscr.addstr(start_y + 3, start_x_bluestr, pointsline)
-        stdscr.addstr(start_y + 4, start_x_yellowstr, yellowscoreline[0])
-        stdscr.addstr(start_y + 5, start_x_title, title[1])
-        stdscr.addstr(start_y + 6, (width // 2) - 2, '-' * 4)
-        stdscr.addstr(start_y + 7, start_x_bluestr, bluescoreline[1])
-        stdscr.addstr(start_y + 8, start_x_bluestr, pointsline)
-        stdscr.addstr(start_y + 9, start_x_yellowstr, yellowscoreline[1])
-        stdscr.addstr(start_y + 10, start_x_title, title[2])
-        stdscr.addstr(start_y + 11, (width // 2) - 2, '-' * 4)
-        stdscr.addstr(start_y + 12, start_x_bluestr, bluescoreline[2])
-        stdscr.addstr(start_y + 13, start_x_bluestr, pointsline)
-        stdscr.addstr(start_y + 14, start_x_yellowstr, yellowscoreline[2])
-        stdscr.addstr(start_y + 15, start_x_title, title[3])
-        stdscr.addstr(start_y + 16, (width // 2) - 2, '-' * 4)
-        stdscr.addstr(start_y + 17, start_x_bluestr, bluescoreline[3])
-        stdscr.addstr(start_y + 18, start_x_bluestr, pointsline)
-        stdscr.addstr(start_y + 19, start_x_yellowstr, yellowscoreline[3])
 
         # Refresh the screen
         stdscr.refresh()
