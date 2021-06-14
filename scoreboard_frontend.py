@@ -27,7 +27,7 @@ def draw_scoreboard(stdscr):
     # Loop where k is the last character pressed
     while True:
 
-        with open('/home/pi/curling-scores.json','r') as fd:
+        with open('curling-scores.json','r') as fd:
             jsondata = json.loads(fd.read())
         # Initialization
         stdscr.clear()

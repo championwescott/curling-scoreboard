@@ -24,10 +24,10 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     """The callback for when a PUBLISH message is received from the server."""
     sheetnum = int(_parse_mqtt_message(msg.topic, msg.payload.decode('utf-8')))
-    with open('/home/pi/curling-scores.json','r') as fd:
+    with open('curling-scores.json','r') as fd:
         jsondata = json.loads(fd.read())
     jsondata[sheetnum-1] = json.loads(msg.payload)
-    with open('/home/pi/curling-scores.json','w') as fd:
+    with open('curling-scores.json','w') as fd:
         json.dump(jsondata,fd,indent=4)
     
     
