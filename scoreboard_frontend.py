@@ -106,14 +106,20 @@ def draw_scoreboard(stdscr):
             rectangle(stdscr,start_y + (i*5),start_x_bluestr-1,start_y + 4+ (i*5),start_x_yellowstr+len(yellowscoreline[i]))     
             stdscr.addstr(start_y + (i*5), start_x_title, title[i])
             stdscr.attron(curses.color_pair(2))
-            stdscr.attron(curses.A_BOLD)
+            
+            if bluetotalscore[i] > yellowtotalscore[i]:
+                stdscr.attron(curses.A_BOLD)
+            else:
+                stdscr.attroff(curses.A_BOLD)
             stdscr.addstr(start_y + 1+ (i*5), start_x_bluestr, bluescoreline[i].replace("0"," "))
             stdscr.addstr(start_y + 1+ (i*5), start_x_bluestr+len(bluescoreline[i])+2, str(bluetotalscore[i]))
             stdscr.attron(curses.color_pair(1))
-            stdscr.attron(curses.A_BOLD)
             stdscr.addstr(start_y + 2+ (i*5), start_x_bluestr, pointsline[i])
             stdscr.attron(curses.color_pair(3))
-            stdscr.attron(curses.A_BOLD)
+            if yellowtotalscore[i] > bluetotalscore[i]:
+                stdscr.attron(curses.A_BOLD)
+            else:
+                stdscr.attroff(curses.A_BOLD)
             stdscr.addstr(start_y + 3+ (i*5), start_x_yellowstr, yellowscoreline[i].replace("0"," "))
             stdscr.addstr(start_y + 3+ (i*5), start_x_yellowstr+len(yellowscoreline[i])+2, str(yellowtotalscore[i]))
             stdscr.attron(curses.color_pair(1))
@@ -162,7 +168,6 @@ def rectangle2(win, uly, ulx, lry, lrx):
 
 def main():
     curses.wrapper(draw_scoreboard)
-    #curses.wrapper(test_editbox)
 
 if __name__ == "__main__":
     main()
