@@ -82,10 +82,6 @@ def draw_scoreboard(stdscr):
         start_x_yellowstr = int((width // 2) - (len(yellowscoreline[0]) // 2) - len(yellowscoreline[0]) % 2)
         start_y = 3
 
-        # Rendering some text
-        #whstr = "Width: {}, Height: {}".format(width, height)
-        #stdscr.addstr(0, 0, whstr, curses.color_pair(1))
-
         # Turning on attributes for title
         stdscr.attron(curses.color_pair(2))
         stdscr.attron(curses.A_BOLD)
