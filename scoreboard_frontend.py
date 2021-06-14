@@ -24,9 +24,8 @@ def draw_scoreboard(stdscr):
     curses.init_pair(2, curses.COLOR_CYAN, curses.COLOR_BLACK)
     curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)
 
-    # Loop where k is the last character pressed
     while True:
-
+        # Read in the JSON document
         with open('curling-scores.json','r') as fd:
             jsondata = json.loads(fd.read())
         # Initialization
@@ -35,7 +34,6 @@ def draw_scoreboard(stdscr):
 
 
         # Declaration of strings
-        #title = "SHEET " + str(jsondata[2]["sheet"])[:width-1]
         bluescoreline = ["","","",""]
         yellowscoreline = ["","","",""]
         i = 0
@@ -67,6 +65,7 @@ def draw_scoreboard(stdscr):
                 i += 1
             j += 1
 
+        
         pointsline =  "H  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15"
         pointslinelen = len(pointsline)
         pointsline = ["","","",""]
@@ -81,25 +80,17 @@ def draw_scoreboard(stdscr):
         start_x_pointsstr = int((width // 2) - (len(pointsline) // 2) - len(pointsline) % 2)
         start_x_bluestr = int((width // 2) - (len(bluescoreline[0]) // 2) - len(bluescoreline[0]) % 2)
         start_x_yellowstr = int((width // 2) - (len(yellowscoreline[0]) // 2) - len(yellowscoreline[0]) % 2)
-        #start_y = int((height // 2) - 2)
         start_y = 3
 
         # Rendering some text
         #whstr = "Width: {}, Height: {}".format(width, height)
         #stdscr.addstr(0, 0, whstr, curses.color_pair(1))
 
-        # Render status bar
-        stdscr.attron(curses.color_pair(3))
-        #stdscr.addstr(height-1, 0, statusbarstr)
-        #stdscr.addstr(height-1, len(statusbarstr), " " * (width - len(statusbarstr) - 1))
-        stdscr.attroff(curses.color_pair(3))
-
         # Turning on attributes for title
         stdscr.attron(curses.color_pair(2))
         stdscr.attron(curses.A_BOLD)
 
-        # Rendering title
-        
+        # Rendering scoreboard        
         i = 0
         while i < 4:
             stdscr.attron(curses.color_pair(1))
