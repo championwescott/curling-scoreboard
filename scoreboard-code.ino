@@ -3,11 +3,11 @@
 #include <ArduinoJson.h>
 
 
-const char* ssid = "CANTINA";
-const char* password = "allisonisthebest";
-const char* mqtt_server = "mqtt.championwescott.lan";
-const char* HostName = "test";
-const char* topic = "test/gamescore";
+const char* ssid = "Public";
+const char* password = "password";
+const char* mqtt_server = "broker.hivemq.com";
+const char* HostName = "Sheet2";
+const char* topic = "curling/palmettocurling/score/2";
 const char* mqttUser = "MQTT USER2";
 const char* mqttPassword = "MQTT PASSWORD";
 WiFiClient espClient;
