@@ -4,8 +4,8 @@
 
 
 const char* ssid = "Public";
-const char* password = "password";
-const char* mqtt_server = "broker.hivemq.com";
+//const char* password = "PASSWORD"; //no password for Public
+const char* mqtt_server = "broker.hivemq.com"; //Public broker
 const char* HostName = "Sheet2";
 const char* topic = "curling/palmettocurling/score/2";
 const char* mqttUser = "MQTT USER2";
@@ -14,15 +14,15 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 //const int bluePins[] = {3,2,0,4};
-const int bluePins[] = {4,0,2,3};
+const int yellowPins[] = {4,0,2,3};
 
 //const int yellowPins[] = {14,12,13,15};
-const int yellowPins[] = {15,13,12,14};
+const int bluePins[] = {15,13,12,14};
 char out[512];
 StaticJsonDocument<1024> score;
 //JsonObject& score = jsonBuffer.createObject();
-int blueEnablePin = 5;
-int yellowEnablePin = 16;
+int yellowEnablePin = 5;
+int blueEnablePin = 16;
 
 int blueScore[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 int yellowScore[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -40,8 +40,8 @@ void setup_wifi() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-
+//  WiFi.begin(ssid, password);
+  WiFi.begin(ssid);
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
     delay(500);
@@ -112,8 +112,7 @@ int returnEndVal(float resistor) {
   }
   return End;
 }
-
-int setpins(const int pins[], bool A, bool B, bool C, bool D) {
+void setpins(const int pins[], bool A, bool B, bool C, bool D) {
     digitalWrite(pins[0],A);
     digitalWrite(pins[1],B);
     digitalWrite(pins[2],C);
