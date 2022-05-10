@@ -29,7 +29,7 @@ int yellowScore[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 float Vin = 3.0;
 float Vout = 0.0;
-float R1 = 974.0;
+float R1 = 993.0;
 float R2 = 0;
 float buffer = 0.0;
 
@@ -40,7 +40,7 @@ void setup_wifi() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.mode(WIFI_STA);
-//  WiFi.begin(ssid, password);
+  //WiFi.begin(ssid, password);
   WiFi.begin(ssid);
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
@@ -173,9 +173,10 @@ void readBlue() {
       setpins(bluePins,1,1,1,1);
     }
     delay(500);
-    buffer = analogRead(0);
+    buffer = readADCpin();
     Vout = (buffer / 1024.0) * Vin;
     R2=((Vin/Vout)-1)*R1;
+    Serial.println(R2-107);
     //Serial.println(returnEndVal(R2));
     blueScore[x] = returnEndVal(R2-100);
     x++;
@@ -236,7 +237,7 @@ void readYellow() {
       setpins(yellowPins,1,1,1,1);
     }
     delay(500);
-    buffer = analogRead(0);
+    buffer = readADCpin();
     Vout = (buffer / 1024.0) * Vin;
     R2=((Vin/Vout)-1)*R1;
     //Serial.println(returnEndVal(R2));
@@ -245,7 +246,20 @@ void readYellow() {
   }
 }   
 
-
+float readADCpin() {
+    const unsigned int numReadings = 100;
+    float analogVals[numReadings];
+    unsigned int i = 0;
+    float sum = 0.0;
+    
+    for(i=0;i<numReadings;i++) {
+      analogVals[i] = analogRead(0);
+    }
+    for(i=0;i<numReadings;i++) {
+      sum += analogVals[i];
+    }
+    return (sum / numReadings);
+}
 
 void setup() {
   Serial.begin(9600);
