@@ -80,6 +80,6 @@ The python scripts are fairly basic.
 
 "scoreboard_backend.py" will monitor the MQTT topic and write the received JSON output to a file.
 
-"scoreboard_frontend.py" will read tha file, and display an updating, textbased scoreboard.
+"scoreboard_frontend.py" will read tha file, and display an updating, textbased scoreboard.  Ideally, this would pull data from your League backend to populate draw times and matchups.
 
 "scoreboard-code.ino" is the firmware for the microcontroller.  Should be able to compile and load it from an Arduino IDE.  I am also working on an ESPHome configuration.
