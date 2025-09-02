@@ -72,3 +72,13 @@ Then we can calculate the value of R1, and determine which card was hung on the 
 The code will loop through each input on the multiplexers (first one, then the second), compare the measured resistances with set values, record which cards are hung where, and then update a database over MQTT.
 
 I don't have a picture of the internal of the scoreboard, but it was a lot of wires.  32 wires for each rock color.
+
+
+CODE
+The python scripts are fairly basic.  
+
+"scoreboard_backend.py" will monitor the MQTT topic and write the received JSON output to a file.
+
+"scoreboard_frontend.py" will read tha file, and display an updating, textbased scoreboard.
+
+"scoreboard-code.ino" is the firmware for the microcontroller.  Should be able to compile and load it from an Arduino IDE.  I am also working on an ESPHome configuration.
