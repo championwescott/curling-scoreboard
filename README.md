@@ -70,3 +70,5 @@ The output of the multiplexer is connected to the Analog input port on the micro
 Then we can calculate the value of R1, and determine which card was hung on the scoreboard.
 
 The code will loop through each input on the multiplexers (first one, then the second), compare the measured resistances with set values, record which cards are hung where, and then update a database over MQTT.
+
+I don't have a picture of the internal of the scoreboard, but it was a lot of wires.  32 wires for each rock color.
