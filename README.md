@@ -5,33 +5,57 @@ This is a process to digitize a curling club scoreboard while still maintaining 
 
 HARDWARE NEEDED (for each scoreboard)
 1. Curling scoreboard
-2. Countersunk magnets (similar to https://www.amazon.com/dp/B095SF6X36?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_22)
-3. flathead bolts (head of the bolt should fit inside the magnet hole, and bolt should go through the backof the scoreboard)
-4. Wire
-5. Printed Circuit Board (PCB) <img width="1097" height="433" alt="image" src="https://github.com/user-attachments/assets/ee91c68e-4d47-477d-8547-3472dccc4a47" />
+<img width="512" height="384" alt="image" src="https://github.com/user-attachments/assets/394396c5-2509-4516-9664-5f75207ced34" />
+
+3. Countersunk magnets (similar to https://www.amazon.com/dp/B095SF6X36?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_22)
+4. flathead bolts (head of the bolt should fit inside the magnet hole, and bolt should go through the backof the scoreboard)
+5. Wire
+6. Printed Circuit Board (PCB)
+<img width="1097" height="433" alt="image" src="https://github.com/user-attachments/assets/ee91c68e-4d47-477d-8547-3472dccc4a47" />
+<img width="512" height="680" alt="image" src="https://github.com/user-attachments/assets/43b5a954-b3c6-4205-8349-6a52dcd2fa33" />
 
 	5a. microcontroller - D1 mini esp32 (many of the esp32 or es8266 dvices will work, but the PCB was deigned for this footprint)  I am redesigning with an ESP32, as it gives a 12-bit ADC, instead of the 10-bit ADC that the Wemos D1 Mini ESP-12F gives
-	5b. 2x 16-channel Analog Multiplexer module (https://www.amazon.com/dp/B07K7JF3HX?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_1)
-	5c. 1k ohm resistor
-	5d. 4.7uF capacitor
-	5e. Linear Regulator - I used a TPS76330 to stabilize the voltage level to 3V
-	5f. 17x 1x2 screw terminals
-6. 6V power supply (4x AA batteries ork fine)
-6. Hang Cards
+	
+ 	5b. 2x 16-channel Analog Multiplexer module (https://www.amazon.com/dp/B07K7JF3HX?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_1)
+
+ 	5c. 1k ohm resistor
+
+ 	5d. 4.7uF capacitor
+
+ 	5e. Linear Regulator - I used a TPS76330 to stabilize the voltage level to 3V
+
+ 	5f. 17x 1x2 screw terminals
+ 
+8. 6V power supply (4x AA batteries work fine)
+
+9. Hang Cards
+    
 	Each card needs two pieces of ferrous metal to hang on the magnets
-	In between each piece of metal, there needs to be a unique resisor value.
-	I used teh following:
-	Hammer(LSFE) card: 100 ohm
-	1st end - 200
-	2nd - 300
-	3nd - 400
-	4th - 500
-	5th - 600
-	6th - 700
-	7th - 800
-	8th - 900
-	9th - 1000
-	10th - 1100
+	In between each piece of metal, there needs to be a unique resistor value.
+	I used the following:
+
+		Hammer(LSFE) card: 100 ohm
+
+		1st end - 200
+   
+		2nd - 300
+   
+		3nd - 400
+   
+		4th - 500
+   
+		5th - 600
+   
+		6th - 700
+   
+		7th - 800
+   
+		8th - 900
+   
+		9th - 1000
+   
+		10th - 1100
+   
 	
 The basic idea behind this is as follows: a 3V voltage signal is output from the PCB and runs to the first magnet of each hang card spot on the scoreboard.  The second magnet i wired to the corresponding screw terminal on the PCB.
 
