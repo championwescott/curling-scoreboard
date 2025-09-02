@@ -24,8 +24,7 @@ HARDWARE NEEDED (for each scoreboard)
 
  	5e. Linear Regulator - I used a TPS76330 to stabilize the voltage level to 3V
 
- 	5f. 17x 1x2 screw terminals
- 
+ 	5f. 17x 1x2 screw terminals.  I used these 5mm ones (https://www.amazon.com/Tegg-Screw-Terminal-Connector-Arduino/dp/B07QRHJ489/?th=1)
 8. 6V power supply (4x AA batteries work fine)
 
 9. Hang Cards
