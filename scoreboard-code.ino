@@ -29,7 +29,7 @@ int yellowScore[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 float Vin = 3.0;
 float Vout = 0.0;
-float R1 = 993.0;
+float R1 = 993.0; //measure with a multimeter to get most accurate value
 float R2 = 0;
 float buffer = 0.0;
 
