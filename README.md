@@ -75,6 +75,7 @@ I don't have a picture of the internal of the scoreboard, but it was a lot of wi
 
 
 CODE
+
 The python scripts are fairly basic.  
 
 "scoreboard_backend.py" will monitor the MQTT topic and write the received JSON output to a file.
