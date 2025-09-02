@@ -8,11 +8,11 @@ import curses
 jsondata = [0] * 4
 
 
-MQTT_ADDRESS = 'mqtt.championwescott.lan'
+MQTT_ADDRESS = 'BROKER_HERE'
 MQTT_USER = 'mqtt'
 MQTT_PASSWORD = 'mqtt'
-MQTT_TOPIC = 'curling/palmetto/+'
-MQTT_REGEX = 'curling/palmetto/([^/]+)'
+MQTT_TOPIC = 'TOPIC_HERE'
+MQTT_REGEX = 'TOPIC_HERE/([^/]+)'
 MQTT_CLIENT_ID = 'test_id'
 
 
