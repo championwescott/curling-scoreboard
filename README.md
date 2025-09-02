@@ -4,11 +4,12 @@
 This is a process to digitize a curling club scoreboard while still maintaining the stardard "hang a card on the board" method for gameplay.
 
 HARDWARE NEEDED (for each scoreboard)
-1. Curling scoreboard (picture here)
+1. Curling scoreboard
 2. Countersunk magnets (similar to https://www.amazon.com/dp/B095SF6X36?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_22)
 3. flathead bolts (head of the bolt should fit inside the magnet hole, and bolt should go through the backof the scoreboard)
 4. Wire
-5. Printed Circuit Board (PCB) 
+5. Printed Circuit Board (PCB) <img width="1097" height="433" alt="image" src="https://github.com/user-attachments/assets/ee91c68e-4d47-477d-8547-3472dccc4a47" />
+
 	5a. microcontroller - D1 mini esp32 (many of the esp32 or es8266 dvices will work, but the PCB was deigned for this footprint)  I am redesigning with an ESP32, as it gives a 12-bit ADC, instead of the 10-bit ADC that the Wemos D1 Mini ESP-12F gives
 	5b. 2x 16-channel Analog Multiplexer module (https://www.amazon.com/dp/B07K7JF3HX?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_1)
 	5c. 1k ohm resistor
