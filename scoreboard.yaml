@@ -1,0 +1,856 @@
+substitutions:
+  update_time: never
+  disp_name: scoreboard-test
+  base_voltage: "3.041"
+  base_resistance: "993"
+  sheet_num: "3"
+
+globals:
+  - id: blue_array
+    type: int[16]
+    initial_value: '{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}'
+  - id: yellow_array
+    type: int[16]
+    initial_value: '{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}'
+
+esphome:
+  name: scoreboard-test
+  includes:
+    - scoreboard-test.h
+
+esp8266:
+  board: d1_mini
+
+logger:
+
+api:
+  encryption:
+    key: "OQkjlmxSSndd4bKdPHJwx0WHg+9iwELLHfr/wyBWzUM="
+
+web_server:
+
+
+ota:
+  - platform: esphome
+    password: "secret"
+  - platform: web_server
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+mqtt:
+  #broker: "broker.hivemq.com"
+  id: mqtt_client
+  broker: "mqtt.championwescott.lan"
+  username: "MQTT USER2"
+  password: "MQTT PASSWORD"
+  topic_prefix: curling/palmettocurling/score
+
+output:
+  # Yellow team selectors
+  - platform: gpio
+    pin: GPIO4
+    id: yellow_cd74hc4067_3
+  - platform: gpio
+    pin: GPIO0
+    id: yellow_cd74hc4067_2
+  - platform: gpio
+    pin: GPIO2
+    id: yellow_cd74hc4067_1
+  - platform: gpio
+    pin: GPIO3
+    id: yellow_cd74hc4067_0
+
+  # Blue team selectors
+  - platform: gpio
+    pin: GPIO15
+    id: blue_cd74hc4067_3
+  - platform: gpio
+    pin: GPIO13
+    id: blue_cd74hc4067_2
+  - platform: gpio
+    pin: GPIO12
+    id: blue_cd74hc4067_1
+  - platform: gpio
+    pin: GPIO14
+    id: blue_cd74hc4067_0
+
+  # Enable pins
+  - platform: gpio
+    pin:
+      number: GPIO5
+      inverted: true
+    id: yellow_cd74hc4067_enable
+  - platform: gpio
+    pin:
+      number: GPIO16
+      inverted: true
+    id: blue_cd74hc4067_enable
+
+interval:
+  - interval: 120s
+    then:
+      - script.execute: readADC
+
+script:
+  - id: readADC
+    then:
+      # Color	A	B 	C	D	Hang Spot
+      # 0	0	0	0	0	Blue LSFE
+      # 0	0	0	0	1	Blue 1
+      # 0	0	0	1	0	Blue 2
+      # 0	0 0	1	1	Blue 3
+      # 0	0	1	0	0	Blue 4
+      # 0	0	1	0	1	Blue 5
+      # 0	0	1	1	0	Blue 6
+      # 0	0 1	1	1	Blue 7
+      # 0	1	0	0	0 Blue 8
+      # 0	1	0	0	1	Blue 9
+      # 0	1	0	1	0	Blue 10
+      # 0	1 0	1	1	Blue 11
+      # 0	1	1	0	0 Blue 12
+      # 0	1	1	0	1	Blue 13
+      # 0	1	1	1	0	Blue 14
+      # 0	1 1	1	1	Blue 15
+      # 1	0	0	0	0 Yellow LSFE
+      # 1	0	0	0	1	Yellow 1
+      # 1	0	0	1	0	Yellow 2
+      # 1	0 0	1	1	Yellow 3
+      # 1	0	1	0	0 Yellow 4
+      # 1	0	1	0	1	Yellow 5
+      # 1	0	1	1	0	Yellow 6
+      # 1	0 1	1	1	Yellow 7
+      # 1	1	0	0	0 Yellow 8
+      # 1	1	0	0	1	Yellow 9
+      # 1	1	0	1	0	Yellow 10
+      # 1	1 0	1	1	Yellow 11
+      # 1	1	1	0	0 Yellow 12
+      # 1	1	1	0	1	Yellow 13
+      # 1	1	1	1	0	Yellow 14
+      # 1	1 1	1	1	Yellow 15
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_lsfe
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_on: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_1
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_on: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_2
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_on: blue_cd74hc4067_0
+      - output.turn_on: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_3
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_on: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_4
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_on: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_on: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_5
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_on: blue_cd74hc4067_1
+      - output.turn_on: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_6
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_on: blue_cd74hc4067_0
+      - output.turn_on: blue_cd74hc4067_1
+      - output.turn_on: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_7
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_on: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_8
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_on: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_on: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_9
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_on: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_on: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_10
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_on: blue_cd74hc4067_0
+      - output.turn_on: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_on: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_11
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_on: blue_cd74hc4067_2
+      - output.turn_on: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_12
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_on: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_on: blue_cd74hc4067_2
+      - output.turn_on: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_13
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_on: blue_cd74hc4067_1
+      - output.turn_on: blue_cd74hc4067_2
+      - output.turn_on: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_14
+      - delay: 500ms
+      # setup for blue_lsfe
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_off: yellow_cd74hc4067_enable
+      - output.turn_on: blue_cd74hc4067_0
+      - output.turn_on: blue_cd74hc4067_1
+      - output.turn_on: blue_cd74hc4067_2
+      - output.turn_on: blue_cd74hc4067_3
+      - output.turn_on: blue_cd74hc4067_enable
+      - delay: 1s
+      - component.update: blue_15
+      - delay: 500ms
+
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_lsfe
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_on: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_1
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_on: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_2
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_on: yellow_cd74hc4067_0
+      - output.turn_on: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_3
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_on: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_4
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_on: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_on: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_5
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_on: yellow_cd74hc4067_1
+      - output.turn_on: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_6
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_on: yellow_cd74hc4067_0
+      - output.turn_on: yellow_cd74hc4067_1
+      - output.turn_on: yellow_cd74hc4067_2
+      - output.turn_off: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_7
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_on: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_8
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_on: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_on: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_9
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_on: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_on: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_10
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_on: yellow_cd74hc4067_0
+      - output.turn_on: yellow_cd74hc4067_1
+      - output.turn_off: yellow_cd74hc4067_2
+      - output.turn_on: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_11
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_on: yellow_cd74hc4067_2
+      - output.turn_on: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_12
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_on: yellow_cd74hc4067_0
+      - output.turn_off: yellow_cd74hc4067_1
+      - output.turn_on: yellow_cd74hc4067_2
+      - output.turn_on: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_13
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_off: yellow_cd74hc4067_0
+      - output.turn_on: yellow_cd74hc4067_1
+      - output.turn_on: yellow_cd74hc4067_2
+      - output.turn_on: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_14
+      - delay: 500ms
+      # setup for yellow_lsfe
+      - output.turn_off: blue_cd74hc4067_0
+      - output.turn_off: blue_cd74hc4067_1
+      - output.turn_off: blue_cd74hc4067_2
+      - output.turn_off: blue_cd74hc4067_3
+      - output.turn_off: blue_cd74hc4067_enable
+      - output.turn_on: yellow_cd74hc4067_0
+      - output.turn_on: yellow_cd74hc4067_1
+      - output.turn_on: yellow_cd74hc4067_2
+      - output.turn_on: yellow_cd74hc4067_3
+      - output.turn_on: yellow_cd74hc4067_enable
+      - delay: 1s
+      - component.update: yellow_15
+      - delay: 500ms
+
+sensor:
+  - platform: adc
+    pin: A0
+    id: adc_sensor
+    name: "Scoreboard Voltage"
+    internal: True
+    update_interval: 500ms
+    filters:
+      - multiply: 3.3
+
+
+
+  - platform: template
+    id: blue_lsfe
+    accuracy_decimals: 0
+    name: "Blue LSFE"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[0] = int(returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage}));
+      return {};
+  - platform: template
+    id: blue_1
+    accuracy_decimals: 0
+    name: "Blue 1"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[1] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: blue_2
+    accuracy_decimals: 0
+    name: "Blue 2"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[2] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: blue_3
+    accuracy_decimals: 0
+    name: "Blue 3"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[3] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: blue_4
+    accuracy_decimals: 0
+    name: "Blue 4"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[4] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: blue_5
+    accuracy_decimals: 0
+    name: "Blue 5"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[5] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: blue_6
+    accuracy_decimals: 0
+    name: "Blue 6"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[6] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});   
+      return {};
+  - platform: template
+    id: blue_7
+    accuracy_decimals: 0
+    name: "Blue 7"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[7] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage}); 
+      return {};
+  - platform: template
+    id: blue_8
+    accuracy_decimals: 0
+    name: "Blue 8"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[8] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});   
+      return {};
+  - platform: template
+    id: blue_9
+    accuracy_decimals: 0
+    name: "Blue 9"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[9] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage}); 
+      return {};
+  - platform: template
+    id: blue_10
+    accuracy_decimals: 0
+    name: "Blue 10"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[10] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage}); 
+      return {};
+  - platform: template
+    id: blue_11
+    accuracy_decimals: 0
+    name: "Blue 11"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[11] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});  
+      return {};
+  - platform: template
+    id: blue_12
+    accuracy_decimals: 0
+    name: "Blue 12"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[12] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: blue_13
+    accuracy_decimals: 0
+    name: "Blue 13"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[13] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: blue_14
+    accuracy_decimals: 0
+    name: "Blue 14"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[14] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: blue_15
+    accuracy_decimals: 0
+    name: "Blue 15"
+    update_interval: never
+    lambda: |-
+      id(blue_array)[15] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_lsfe
+    accuracy_decimals: 0
+    name: "Yellow LSFE"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[0] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_1
+    accuracy_decimals: 0
+    name: "Yellow 1"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[1] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_2
+    accuracy_decimals: 0
+    name: "Yellow 2"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[2] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_3
+    accuracy_decimals: 0
+    name: "Yellow 3"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[3] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_4
+    accuracy_decimals: 0
+    name: "Yellow 4"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[4] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_5
+    accuracy_decimals: 0
+    name: "Yellow 5"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[5] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_6
+    accuracy_decimals: 0
+    name: "Yellow 6"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[6] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_7
+    accuracy_decimals: 0
+    name: "Yellow 7"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[7] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_8
+    accuracy_decimals: 0
+    name: "Yellow 8"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[8] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage}); 
+      return {};
+  - platform: template
+    id: yellow_9
+    accuracy_decimals: 0
+    name: "Yellow 9"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[9] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_10
+    accuracy_decimals: 0
+    name: "Yellow 10"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[10] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage}); 
+      return {};
+  - platform: template
+    id: yellow_11
+    accuracy_decimals: 0
+    name: "Yellow 11"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[11] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_12
+    accuracy_decimals: 0
+    name: "Yellow 12"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[12] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});   
+      return {};
+  - platform: template
+    id: yellow_13
+    accuracy_decimals: 0
+    name: "Yellow 13"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[13] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_14
+    accuracy_decimals: 0
+    name: "Yellow 14"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[14] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: yellow_15
+    accuracy_decimals: 0
+    name: "Yellow 15"
+    update_interval: never
+    lambda: |-
+      id(yellow_array)[15] = returnEndVal(id(adc_sensor).state, ${base_resistance}, ${base_voltage});
+      return {};
+  - platform: template
+    id: output_json
+    name: "Output JSON"
+    update_interval: 1s
+    lambda: |-
+      outputJson(id(blue_array), id(yellow_array), ${sheet_num});
+      return 0;
